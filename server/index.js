@@ -1,9 +1,39 @@
 const express = require("express");
+const mysql = require("mysql");
+const cors = require("cors");
+
+const connection = mysql.createConnection({
+  host: "127.0.0.1",
+  user: "root",
+  password: "",
+  database: "db_contacts_app",
+});
+
 const app = express();
+connection.connect();
 const port = 3001;
 
-app.get("/", (req, res) => {
-  res.send("hello world");
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.get("/contacts", (req, res) => {
+  const sqlQuery = "SELECT * FROM contacts";
+  connection.query(sqlQuery, (err, result) => {
+    res.send(result);
+  });
+});
+
+app.post("/contacts", (req, res) => {
+  const name = req.body.name;
+  const email = req.body.email;
+  const tel = req.body.telephone;
+
+  const sqlQuery =
+    "INSERT INTO contacts (name, email, telephone) VALUES (?,?,?)";
+  connection.query(sqlQuery, [name, email, tel], (err, result) => {
+    console.log(result);
+  });
 });
 
 app.listen(port, () => {
