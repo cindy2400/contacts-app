@@ -32,7 +32,7 @@ app.post("/contacts", (req, res) => {
   const sqlQuery =
     "INSERT INTO contacts (name, email, telephone) VALUES (?,?,?)";
   connection.query(sqlQuery, [name, email, tel], (err, result) => {
-    console.log(result);
+    res.send(result);
   });
 });
 
