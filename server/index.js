@@ -45,6 +45,19 @@ app.delete("/contact/:id", (req, res) => {
   });
 });
 
+app.put("/contact/:id", (req, res) => {
+  const id = req.params.id;
+  const name = req.body.name;
+  const email = req.body.email;
+  const tel = req.body.telephone;
+
+  const sqlQuery =
+    "UPDATE contacts SET name = ? , email = ? , telephone = ? WHERE id = ?";
+  connection.query(sqlQuery, [name, email, tel, id], (err, result) => {
+    res.send(result);
+  });
+});
+
 app.listen(port, () => {
   console.log(`running on server ${port}`);
 });

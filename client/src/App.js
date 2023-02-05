@@ -48,13 +48,18 @@ function App() {
   return (
     <div>
       <Form
-        getInfoFromForm={getInfoFromForm}
         submitFormHandler={submitFormHandler}
+        getInfoFromForm={getInfoFromForm}
         name={name}
         email={email}
         telephone={telephone}
       />
-      <Items contacts={contacts} />
+      <Items
+        contacts={contacts}
+        name={name}
+        email={email}
+        telephone={telephone}
+      />
     </div>
   );
 }
