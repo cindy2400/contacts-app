@@ -1,32 +1,23 @@
 import { Button, Card, FormControl, FormLabel, Input } from "@chakra-ui/react";
-import { useState } from "react";
+import { useRef } from "react";
 
-const Form = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [telephone, setTelephone] = useState("");
+const Form = ({
+  getInfoFromForm,
+  submitFormHandler,
+  name,
+  email,
+  telephone,
+}) => {
+  const nameRef = useRef();
+  const emailRef = useRef();
+  const telephoneRef = useRef();
 
-  const submitFormHandler = (e) => {
-    e.preventDefault();
-    const reqOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        telephone,
-      }),
-    };
-
-    fetch("http://localhost:3001/contacts", reqOptions)
-      .then((res) => res.json())
-      .then((data) => console.log(data));
-
-    setName("");
-    setEmail("");
-    setTelephone("");
+  const onInputHandler = () => {
+    getInfoFromForm(
+      nameRef.current.value,
+      emailRef.current.value,
+      telephoneRef.current.value
+    );
   };
 
   return (
@@ -35,20 +26,23 @@ const Form = () => {
         <FormLabel>Name</FormLabel>
         <Input
           type="text"
-          onChange={(e) => setName(e.target.value)}
+          ref={nameRef}
           value={name}
+          onChange={onInputHandler}
         />
         <FormLabel>Email</FormLabel>
         <Input
           type="email"
-          onChange={(e) => setEmail(e.target.value)}
+          ref={emailRef}
           value={email}
+          onChange={onInputHandler}
         />
         <FormLabel>Telephone</FormLabel>
         <Input
           type="text"
-          onChange={(e) => setTelephone(e.target.value)}
+          ref={telephoneRef}
           value={telephone}
+          onChange={onInputHandler}
         />
         <Button
           onClick={submitFormHandler}
