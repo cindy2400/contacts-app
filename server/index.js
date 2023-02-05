@@ -36,6 +36,15 @@ app.post("/contacts", (req, res) => {
   });
 });
 
+app.delete("/contact/:id", (req, res) => {
+  const id = req.params.id;
+
+  const sqlQuery = "DELETE FROM contacts WHERE id = ?";
+  connection.query(sqlQuery, [id], (err, result) => {
+    res.send(result);
+  });
+});
+
 app.listen(port, () => {
   console.log(`running on server ${port}`);
 });

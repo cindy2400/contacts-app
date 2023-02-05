@@ -22,6 +22,12 @@ import Form from "./Form";
 const Items = ({ contacts }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const onDeleteHandler = (id) => {
+    fetch(`http://localhost:3001/contact/${id}`, { method: "DELETE" }).then(
+      (res) => console.log(res)
+    );
+  };
+
   return (
     <Card m="5">
       <CardHeader>
@@ -51,7 +57,11 @@ const Items = ({ contacts }) => {
                 >
                   Edit
                 </Button>
-                <Button colorScheme="red" m="2">
+                <Button
+                  onClick={() => onDeleteHandler(contact.id)}
+                  colorScheme="red"
+                  m="2"
+                >
                   Delete
                 </Button>
               </Box>
