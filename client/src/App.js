@@ -20,6 +20,12 @@ function App() {
     setTelephone(telephone);
   };
 
+  const changeStateAfterEditDelete = (contacts) => {
+    fetch("http://localhost:3001/contacts")
+      .then((res) => res.json())
+      .then((data) => setContacts(data));
+  };
+
   const submitFormHandler = (e) => {
     e.preventDefault();
     const reqOptions = {
@@ -34,9 +40,9 @@ function App() {
       }),
     };
 
-    fetch("http://localhost:3001/contacts", reqOptions)
-      .then((res) => res.json())
-      .then((data) => console.log(data));
+    fetch("http://localhost:3001/contacts", reqOptions).then((res) =>
+      changeStateAfterEditDelete(null)
+    );
 
     setContacts([...contacts, { name, email, telephone }]);
 
@@ -56,9 +62,7 @@ function App() {
       />
       <Items
         contacts={contacts}
-        name={name}
-        email={email}
-        telephone={telephone}
+        changeStateAfterEditDelete={changeStateAfterEditDelete}
       />
     </div>
   );

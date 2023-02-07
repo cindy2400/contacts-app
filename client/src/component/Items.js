@@ -22,7 +22,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 
-const Items = ({ contacts }) => {
+const Items = ({ contacts, changeStateAfterEditDelete }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [id, setId] = useState("");
   const [name, setName] = useState("");
@@ -31,7 +31,10 @@ const Items = ({ contacts }) => {
 
   const onDeleteHandler = (id) => {
     fetch(`http://localhost:3001/contact/${id}`, { method: "DELETE" }).then(
-      (res) => console.log(res)
+      (res) =>
+        changeStateAfterEditDelete(
+          contacts.filter((contact) => contact.id !== id)
+        )
     );
   };
 
@@ -49,9 +52,23 @@ const Items = ({ contacts }) => {
       }),
     };
 
-    fetch(`http://localhost:3001/contact/${id}`, reqOptions)
-      .then((res) => res.json())
-      .then((data) => console.log(data));
+    fetch(`http://localhost:3001/contact/${id}`, reqOptions).then((res) => {
+      console.log(res);
+      changeStateAfterEditDelete(
+        contacts.map((contact) => {
+          if (contact.id === id) {
+            return {
+              id,
+              name: name,
+              email: email,
+              telephone: telephone,
+            };
+          } else {
+            return contact;
+          }
+        })
+      );
+    });
 
     onClose();
   };
@@ -117,7 +134,7 @@ const Items = ({ contacts }) => {
         </Stack>
       </CardBody>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal key={id} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Edit</ModalHeader>
